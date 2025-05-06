@@ -18,11 +18,9 @@ Este projeto tem como objetivo implementar um sistema de cadastro de pessoas e s
 
 ## 📦 Frameworks e Bibliotecas Utilizadas
 
-- **Spring Boot**: Escolhido por sua produtividade e facilidade de configuração, além de fornecer suporte nativo para construção de APIs REST, injeção de dependência, validação e testes.
-- **Spring Data JPA**: Simplifica o acesso ao banco de dados e reduz significativamente o boilerplate de código.
-- **Lombok**: Utilizado para reduzir código repetitivo (getters, setters, constructors).
-- **H2 Database (para testes)**: Banco de dados em memória utilizado durante os testes automatizados.
-- **JUnit & Mockito**: Frameworks utilizados para criação e execução dos testes unitários.
+- **JPA**: Simplifica o acesso ao banco de dados e reduz significativamente o boilerplate de código.
+- **JSF**
+- **PRimesFaces**
 
 ---
 
@@ -30,8 +28,8 @@ Este projeto tem como objetivo implementar um sistema de cadastro de pessoas e s
 
 ### Pré-requisitos
 
-- Java 17+
-- Maven 3.8+
+- Java
+- Maven
 - Git (opcional)
 
 ### Passos
@@ -46,7 +44,7 @@ Este projeto tem como objetivo implementar um sistema de cadastro de pessoas e s
 2. Compile e execute o projeto:
 
    ```bash
-   ./mvnw spring-boot:run
+   ./mvnw tomcat:run
    ```
 
 3. Acesse a API no navegador ou via ferramentas como Postman:
