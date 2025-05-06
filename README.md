@@ -1,72 +1,144 @@
-# Desafio Técnico - Sistema de Cadastro de Pessoas e Endereços
 
-## 📋 Descrição
+# 🧑‍💼 Aplicação Web de Cadastro de Pessoas e Endereços
 
-Este projeto tem como objetivo implementar um sistema de cadastro de pessoas e seus respectivos endereços. O modelo de dados foi baseado em uma relação 1:N (um para muitos), onde uma pessoa pode ter múltiplos endereços. O foco principal é demonstrar boas práticas de modelagem de dados, organização de código e uso de frameworks modernos.
-
----
-
-## 🧱 Decisões Técnicas e Arquiteturais
-
-- **Modelo Relacional**: O banco de dados foi modelado com base em uma estrutura relacional simples, com duas entidades principais (`Pessoa` e `Endereco`) e um relacionamento 1:N.
-- **Separação por camadas**: O projeto foi dividido em camadas (Controller, Service, Repository) para manter a organização e a responsabilidade única de cada classe.
-- **REST API**: A comunicação é realizada via API RESTful, o que facilita a integração com diferentes front-ends e serviços externos.
-- **Validações**: Foram aplicadas validações nos dados de entrada para garantir a integridade das informações.
-- **Persistência**: Utilizamos um banco de dados relacional (por exemplo, PostgreSQL ou H2 em ambiente de testes).
+Aplicação web completa para cadastro de pessoas e endereços utilizando **Java EE** com **JSF**, **PrimeFaces**, **JPA/Hibernate** e **EJB**.
 
 ---
 
-## 📦 Frameworks e Bibliotecas Utilizadas
+## 📋 Funcionalidades
 
-- **JPA**: Simplifica o acesso ao banco de dados e reduz significativamente o boilerplate de código.
-- **JSF**
-- **PRimesFaces**
+- CRUD completo de pessoas e endereços  
+- Relacionamento 1-N entre Pessoa e Endereço  
+- Interface responsiva com PrimeFaces  
+- Validações em formulários  
+- Filtros e paginação em listagens  
+- Integração com PostgreSQL  
 
 ---
 
-## 🚀 Como Compilar e Executar o Projeto
+## 🛠 Tecnologias
+
+- **Java EE 8**: JSF 2.3, JPA 2.2, EJB 3.2, CDI 2.0  
+- **PrimeFaces 10**: Componentes de interface  
+- **Hibernate 5.4**: Implementação da JPA  
+- **PostgreSQL 13**: Banco de dados relacional  
+- **Payara Server 5**: Servidor de aplicação  
+- **Docker**: Containerização de ambientes  
+
+---
+
+## 🚀 Como Executar
 
 ### Pré-requisitos
 
-- Java
-- Maven
-- Git (opcional)
+- Java JDK 11+  
+- Maven 3.6+  
+- Docker (opcional)  
 
-### Passos
-
-1. Clone o repositório:
-
-   ```bash
-   git clone https://github.com/seu-usuario/desafio-pessoa-endereco.git
-   cd desafio-pessoa-endereco
-   ```
-
-2. Compile e execute o projeto:
-
-   ```bash
-   ./mvnw tomcat:run
-   ```
-
-3. Acesse a API no navegador ou via ferramentas como Postman:
-
-   ```
-   http://localhost:8080/api/pessoas
-   ```
-
----
-
-## ✅ Executando os Testes
-
-Para rodar os testes automatizados, utilize o comando abaixo:
+### 1. Com Docker (recomendado)
 
 ```bash
-./mvnw test
+# Build da aplicação
+mvn clean package
+
+# Build e execução dos containers
+docker-compose up -d
 ```
 
-Os testes cobrem funcionalidades básicas de cadastro, listagem e validações de pessoas e endereços, garantindo que as regras de negócio sejam corretamente aplicadas.
+Acesse: [http://localhost:8080/pessoa-endereco-webapp/pessoa/lista.xhtml](http://localhost:8080/pessoa-endereco-webapp/pessoa/lista.xhtml)
+
+### 2. Localmente
+
+```bash
+# Compilar
+mvn clean package
+
+# Executar PostgreSQL (via Docker)
+docker run --name postgres-pessoa   -e POSTGRES_USER=postgres   -e POSTGRES_PASSWORD=postgres   -e POSTGRES_DB=pessoa_db   -p 5432:5432   -d postgres:13
+
+# Fazer deploy no Payara
+asadmin deploy target/pessoa-endereco-webapp.war
+```
 
 ---
 
-## 📝 Nota Adicional
+## 🐳 Configuração Docker
 
-- O projeto segue princípios de **Clean Code**, **SOLID** e **boas práticas de REST**.
+O arquivo `docker-compose.yml` configura:
+
+- **Aplicação**: Payara Micro com a aplicação  
+- **Banco de dados**: PostgreSQL 13  
+- **Volume**: Persistência de dados do PostgreSQL  
+
+---
+
+## 🗃 Estrutura do Banco
+
+### Tabela `pessoa`
+
+| Campo            | Tipo         | Descrição                    |
+|------------------|--------------|------------------------------|
+| `id`             | SERIAL       | Chave primária              |
+| `nome`           | VARCHAR(150) | Nome completo                |
+| `data_nascimento`| DATE         | Data de nascimento           |
+| `sexo`           | VARCHAR(2)   | M (Masculino) ou F (Feminino)|
+
+### Tabela `endereco`
+
+| Campo       | Tipo         | Descrição              |
+|-------------|--------------|------------------------|
+| `id`        | SERIAL       | Chave primária         |
+| `logradouro`| VARCHAR(100) | Rua/Avenida            |
+| `numero`    | INTEGER      | Número                 |
+| `cidade`    | VARCHAR(100) | Cidade                 |
+| `estado`    | VARCHAR(2)   | UF                     |
+| `cep`       | VARCHAR(8)   | CEP                    |
+| `id_pessoa` | INTEGER      | FK para pessoa         |
+
+---
+
+## 📂 Estrutura do Projeto
+
+```
+src/
+├── main/
+│   ├── java/
+│   │   └── com/exemplo/
+│   │       ├── controller/   # Managed Beans JSF
+│   │       ├── model/        # Entidades JPA
+│   │       ├── repository/   # DAOs
+│   │       ├── service/      # EJBs
+│   │       └── util/         # Utilitários
+│   ├── resources/
+│   │   ├── META-INF/
+│   │   │   └── persistence.xml
+│   │   └── messages.properties
+│   └── webapp/
+│       ├── WEB-INF/
+│       ├── resources/
+│       └── pessoa/           # Views JSF
+└── test/                     # Testes
+```
+
+---
+
+## 🔧 Configurações
+
+- **Banco de dados**: Editar `src/main/resources/META-INF/persistence.xml`  
+- **Tema PrimeFaces**: Alterar em `src/main/webapp/WEB-INF/web.xml`  
+- **Mensagens**: `src/main/resources/messages.properties`  
+
+---
+
+## 📊 Operações Disponíveis
+
+- Listar, cadastrar, editar e remover pessoas  
+- Adicionar múltiplos endereços para cada pessoa  
+- Filtrar pessoas por nome  
+- Validação de formulários  
+
+---
+
+## 📝 Licença
+
+Este projeto está sob a licença **MIT**. Veja o arquivo `LICENSE` para mais detalhes.
